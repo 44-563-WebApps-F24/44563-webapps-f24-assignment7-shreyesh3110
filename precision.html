@@ -56,15 +56,15 @@
     }
 
     function startTime() {
-      stopTime=undefined;
+        const countdownStart = Math.floor(Math.random() * 9) + 2;
 
-      for (let i = 0; i <= 4; i++) {
+        for (let i = 0; i <= countdownStart; i++) {
         setTimeout(() => {
-          document.getElementById("counter").innerHTML = 4 - i;
+            document.getElementById("counter").innerHTML = countdownStart - i;
         }, i * 1000);
-      }
+        }
 
-      setTimeout(() => {
+        setTimeout(() => {
         if (stopTime === undefined) {
           document.getElementById("target").innerHTML = "Too Slow";
         }
