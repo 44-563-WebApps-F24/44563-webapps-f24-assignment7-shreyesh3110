@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title> precision </title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  <style>
+    body {
+      background-color: #f8f9fa;
+      padding: 20px;
+      text-align: center;
+      background-color: beige;
+    }
+
+    h2 {
+      margin-bottom: 20px;
+    }
+
+    #target {
+      font-size: 1.5em;
+      margin-top: 20px;
+      color: #333;
+    }
+
+    #counter {
+      font-size: 1.5em;
+      margin-top: 10px;
+      color: #007bff;
+    }
+
+    .btn {
+      margin-top: 20px;
+    }
+  </style>
+</head>
+
+<body >
+  <div class="container">
+    <h2 style="background-color: black;color: aqua;font-style: italic;">Shreyesh Chennagouni speed check</h2>
+    <div id="target">Your time</div>
+    <div id="counter">Count</div>
+
+    <button class="btn btn-success" onclick="startTime()">Start Timer</button>
+    <button class="btn btn-danger" onclick="recordTime()">Stop Timer</button>
+  </div>
+
+  <script>
+
+    let stopTime = undefined;
+
+    function recordTime() {
+      stopTime = Date.now();
+    }
+
+    function startTime() {
+      const countdownStart = Math.floor(Math.random() * 9) + 2;
+
+      for (let i = 0; i <= countdownStart; i++) {
+        setTimeout(() => {
+          document.getElementById("counter").innerHTML = countdownStart - i;
+        }, i * 1000);
+      }
+
+      setTimeout(() => {
+        if (stopTime === undefined) {
+          document.getElementById("target").innerHTML = "Too Slow";
+        }
+        else {
+          let elapsedTime = Date.now() - stopTime;
+          document.getElementById("target").innerHTML = `Time was ${elapsedTime} ms.`;
+        }
+      }, countdownStart*1000);
+    }
+
+
+  </script>
+
+</body>
+
+</html>
