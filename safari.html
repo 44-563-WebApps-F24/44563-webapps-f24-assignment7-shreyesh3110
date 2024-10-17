@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <html>
-    <title>Lab 07</title>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Lab 07</title>
 <style>
  body {
     font-family: Arial, sans-serif;
@@ -8,23 +11,6 @@
     margin: 20px;
 }
 
-.game-info {
-    margin: 20px 0;
-}
-
-.game-field {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-}
-
-.game-field div {
-    width: 100px;
-    height: 100px;
-    margin: 5px;
-    background-size: cover;
-    background-position: center;
-}
 .location {
         width: 50px;
         height: 50px;
@@ -53,15 +39,18 @@ img {
     background-image: url('tree.jpg');
 }
     </style>
+    </head>
+    
     <body>
         <h2 style="font-family: Georgia, 'Times New Roman', Times, serif;text-align: center; color: rgb(80, 80, 255);">Shreyesh Chennagouni goes on safari</h2>
-        <div style="background-color: bisque;" class="game-info">
-            <p style="font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;">Click on the locations to find rare animals, watch out for the lion</p>
-            <p id="locations" style="font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;font-style: italic;">Number of locations checked is zero</p>
-            <p id="score" style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">Score is zero</p>
-            <p style="font-family: Arial, Helvetica, sans-serif;color: red;background-color:black;">Click for help</p>
-            <p id="help" style="font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;">Help report</p>
+        <div style="background-color: bisque;" class="text-center mt-4">
+            <div style="font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;">Click on the locations to find rare animals, watch out for the lion</div>
+            <div id="locations" style="font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;font-style: italic;">Number of locations checked is zero</div>
+            <div id="score" style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">Score is zero</div>
+            <div style="font-family: Arial, Helvetica, sans-serif;color: red;background-color:black;"><a href="#" onclick="help()">Click for help</a></div>
+            <div id="help" style="font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;">Help report</div>
         </div>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
         <div class="container">
             <div class="row">
                 <div class="col-2"><img id="image0" onclick="check(0)" src="tree.jpg" alt="Tree"></div>
@@ -116,6 +105,89 @@ img {
                 <div class="col-2"><img id="image34" onclick="check(34)" src="tree.jpg" alt="Tree"></div>
                 <div class="col-2"><img id="image35" onclick="check(35)" src="tree.jpg" alt="Tree"></div>
             </div>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+        </div>
+
+        <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script> -->
+        <script>
+
+            const ids = [];
+            for (let i = 0; i < 36; i++) {
+                ids.push(`image${i}`);
+            }
+    
+            let score = 0;
+    
+            let locationsVisited = 0;
+    
+            let lastLocation = 0;
+            const lionLocation = Math.floor(Math.random() * 36);;
+            const zebraLocations = [];
+            while (zebraLocations.length < 5) {
+                let randomPosition = Math.floor(Math.random() * 36);
+                if (!zebraLocations.includes(randomPosition) && randomPosition !== lionLocation) {
+                    zebraLocations.push(randomPosition);
+                }
+            }
+    
+            let gameOver = false;
+    
+            function check(position) {
+                if (gameOver) return;
+    
+                const id = ids[position];
+                const imageElement = document.getElementById(id);
+    
+                if (position === lionLocation) {
+                    imageElement.src = 'lion.jpg';
+                    gameOver = true;
+                    score -= 2;
+                }
+                else if (zebraLocations.includes(position)) {
+                    imageElement.src = 'zebra.jpg';
+                    score += 4;
+                    zebraLocations = zebraLocations.filter(z => z !== position);
+                }
+                else {
+                    imageElement.src = 'elephant.jpg';
+                    score += 1;
+                }
+    
+                locationsVisited++;
+                lastLocation = position;
+    
+                document.getElementById('score').innerHTML = `<p>Score is ${score}.</p>`;
+                document.getElementById('locations').innerHTML = `<p>Number of locations checked is ${locationsVisited}.</p>`;
+            }
+    
+            function help() {
+                const row = Math.floor(lastLocation / 6);
+                const col = lastLocation % 6;
+    
+                const neighbors = [(lastLocation + 5) % 36, (lastLocation + 1) % 36, (lastLocation + 6) % 36,
+                (lastLocation + 30) % 36,
+                ];
+    
+                if (neighbors.some(n => zebraLocations.includes(n))) {
+                    document.getElementById('help').innerText = "I see stripes";
+                }
+                else {
+                    const lionRow = Math.floor(lionLocation / 6);
+                    const lionCol = lionLocation % 6;
+                    const rowDiff = Math.abs(lionRow - row);
+                    const colDiff = Math.abs(lionCol - col);
+                    if (rowDiff <= 1 && colDiff <= 1) {
+                        document.getElementById('help').innerText = "Rawr";
+                    }
+                    else {
+                        document.getElementById('help').innerText = "It's grey";
+                    }
+                }
+            }
+            function moveLion() {
+                const directions = [-1, 1, -6, 6];
+                const randomDir = directions[Math.floor(Math.random() * directions.length)];
+                lionLocation = (lionLocation + randomDir + 36) % 36;
+            }
+        </script>
     </body>
 </html>
