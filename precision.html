@@ -56,11 +56,11 @@
     }
 
     function startTime() {
-      const countdownStart = Math.floor(Math.random() * 9) + 2;
+      stopTime=undefined;
 
-      for (let i = 0; i <= countdownStart; i++) {
+      for (let i = 0; i <= 4; i++) {
         setTimeout(() => {
-          document.getElementById("counter").innerHTML = countdownStart - i;
+          document.getElementById("counter").innerHTML = 4 - i;
         }, i * 1000);
       }
 
