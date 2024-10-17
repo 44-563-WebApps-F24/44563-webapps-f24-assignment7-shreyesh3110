@@ -120,8 +120,8 @@ img {
             let locationsVisited = 0;
     
             let lastLocation = 0;
-            const lionLocation = Math.floor(Math.random() * 36);;
-            const zebraLocations = [];
+            const lionLocation = Math.floor(14);;
+            const zebraLocations = [1, 8, 12, 22, 34];
             while (zebraLocations.length < 5) {
                 let randomPosition = Math.floor(Math.random() * 36);
                 if (!zebraLocations.includes(randomPosition) && randomPosition !== lionLocation) {
